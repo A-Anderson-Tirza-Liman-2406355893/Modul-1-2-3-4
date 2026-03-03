@@ -77,7 +77,7 @@ class ProductServiceImplTest {
     void testDelete() {
         doNothing().when(productRepository).delete("123");
 
-        productService.delete("123");
+        productService.deleteProductById("123");
         verify(productRepository, times(1)).delete("123");
     }
 }
