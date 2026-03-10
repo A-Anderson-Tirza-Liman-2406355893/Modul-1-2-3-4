@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP123"); // Kurang dari 16 karakter
         Payment payment = new Payment("2", "VOUCHER", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -41,7 +42,7 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "PROMO1234ABC5678"); // Tidak diawali ESHOP
         Payment payment = new Payment("3", "VOUCHER", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -49,7 +50,7 @@ class PaymentTest {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP12ABCDEFGHJ"); // Hanya 2 angka, harusnya 8
         Payment payment = new Payment("4", "VOUCHER", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -58,7 +59,7 @@ class PaymentTest {
         paymentData.put("address", "Jalan Margonda Raya");
         paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("5", "CASH_ON_DELIVERY", paymentData);
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 
     @Test
@@ -67,7 +68,7 @@ class PaymentTest {
         paymentData.put("address", "");
         paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("6", "CASH_ON_DELIVERY", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -76,6 +77,6 @@ class PaymentTest {
         paymentData.put("address", "Jalan Margonda Raya");
         // deliveryFee tidak dimasukkan (null)
         Payment payment = new Payment("7", "CASH_ON_DELIVERY", paymentData);
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 }

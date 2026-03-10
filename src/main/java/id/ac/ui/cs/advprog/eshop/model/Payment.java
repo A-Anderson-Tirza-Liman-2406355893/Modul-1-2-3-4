@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import enums.PaymentStatus;
 import lombok.Getter;
 
 import java.util.Map;
@@ -12,7 +13,6 @@ public class Payment {
     private String status;
     private Map<String, String> paymentData;
 
-    // Konstruktor ini dipanggil jika status sudah diketahui (misal dari repository)
     public Payment(String id, String method, String status, Map<String, String> paymentData) {
         this.id = id;
         this.method = method;
@@ -20,7 +20,6 @@ public class Payment {
         this.paymentData = paymentData;
     }
 
-    // Konstruktor ini dipanggil saat membuat Payment baru, status ditentukan otomatis
     public Payment(String id, String method, Map<String, String> paymentData) {
         this.id = id;
         this.method = method;
@@ -32,21 +31,21 @@ public class Payment {
                     voucherCode.length() == 16 &&
                     voucherCode.startsWith("ESHOP") &&
                     voucherCode.replaceAll("\\D", "").length() == 8) {
-                this.status = "SUCCESS";
+                this.status = PaymentStatus.SUCCESS.getValue();
             } else {
-                this.status = "REJECTED";
+                this.status = PaymentStatus.REJECTED.getValue();
             }
         } else if ("CASH_ON_DELIVERY".equals(method)) {
             String address = paymentData.get("address");
             String deliveryFee = paymentData.get("deliveryFee");
 
             if (address == null || address.isEmpty() || deliveryFee == null || deliveryFee.isEmpty()) {
-                this.status = "REJECTED";
+                this.status = PaymentStatus.REJECTED.getValue();
             } else {
-                this.status = "SUCCESS";
+                this.status = PaymentStatus.SUCCESS.getValue();
             }
         } else {
-            this.status = "REJECTED"; // Default jika method tidak dikenal
+            this.status = PaymentStatus.REJECTED.getValue();
         }
     }
 
