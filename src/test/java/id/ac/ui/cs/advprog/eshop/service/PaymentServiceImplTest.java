@@ -79,27 +79,32 @@ class PaymentServiceImplTest {
 
     @Test
     void testSetStatusSuccess() {
-        Payment payment = payments.get(0);
+        Payment payment = payments.get(0); // VOUCHER
 
-        // Mock getPayment
         when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        when(orderService.updateStatus(order.getId(), "SUCCESS")).thenReturn(order);
 
         Payment result = paymentService.setStatus(payment, "SUCCESS");
 
         assertEquals("SUCCESS", result.getStatus());
-        assertEquals("SUCCESS", order.getStatus()); // Karena Order terkait harus jadi SUCCESS
+
+        verify(orderService, times(1)).updateStatus(order.getId(), "SUCCESS");
     }
 
     @Test
     void testSetStatusRejected() {
-        Payment payment = payments.get(1);
+        Payment payment = payments.get(1); // CASH_ON_DELIVERY
 
         when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        when(orderService.updateStatus(order.getId(), "FAILED")).thenReturn(order);
 
         Payment result = paymentService.setStatus(payment, "REJECTED");
 
         assertEquals("REJECTED", result.getStatus());
-        assertEquals("FAILED", order.getStatus()); // Karena Order terkait harus jadi FAILED
+
+        verify(orderService, times(1)).updateStatus(order.getId(), "FAILED");
     }
 
     @Test
