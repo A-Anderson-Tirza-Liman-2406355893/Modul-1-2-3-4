@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><title>Payment Success</title></head>
+<body>
+<h2>Payment Processed</h2>
+<p>Your Payment ID is: <strong th:text="${payment?.id}"></strong></p>
+<a th:href="@{/payment/detail}">Check Payment Status</a>
+</body>
+</html>
