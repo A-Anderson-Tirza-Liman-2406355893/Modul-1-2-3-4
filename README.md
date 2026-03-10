@@ -340,3 +340,34 @@ Contoh: Bila ada satu service yang mengurus Product+Car+Order dalam satu interfa
 Kesulitan integrasi CI/CD dan deployment aman
 - Kode rapuh/terkait erat mempersulit pembuatan test suite yang cepat dan andal; akibatnya pipeline CI/CD sering gagal atau butuh test environment berat.
 Contoh: Functional tests (Selenium) bergantung pada redirect/route yang stabil; jika kontroler memakai relative redirect atau mapping tumpang tindih, functional test flakey dan deployment otomatis rawan gagal.
+
+# Modul 4
+
+### Refleksi TDD berdasarkan Percival (2017)
+Berdasarkan submodul "Evaluating Your Testing Objectives" oleh Percival, pendekatan TDD yang saya lakukan dalam latihan ini sangat berguna dan efektif untuk memastikan kebenaran logika bisnis (business logic) sebelum implementasi penuh dilakukan.
+
+Hal ini sangat berguna bagi saya karena ada beberapa hal yang penting:
+- Kejelasan Spesifikasi: Dengan menulis test case terlebih dahulu, saya dipaksa mendefinisikan apa yang harus dilakukan oleh method (seperti updateStatus atau createOrder) sebelum memikirkan cara mengimplementasikannya. Ini menghilangkan ambiguitas.
+
+- Keamanan dalam Refactoring: Saat saya melakukan perubahan pada struktur class untuk memenuhi prinsip SOLID, saya merasa jauh lebih aman karena saya memiliki test suite yang dapat langsung memberikan umpan balik jika ada perubahan yang merusak fungsi yang sudah ada.
+
+Hal yang perlu saya perbaiki di masa depan:
+
+- Cakupan Edge Cases: Terkadang saya terlalu fokus pada happy path dan unhappy path yang sederhana. Di masa depan, saya perlu melakukan analisis lebih mendalam terhadap boundary conditions (misalnya input string kosong, atau ID yang tidak ada di tengah batch operasi) agar cakupan tes lebih menyeluruh.
+
+- Mocking yang Lebih Spesifik: Saya perlu memastikan bahwa penggunaan mocking tidak berlebihan (over-mocking) yang justru mengikat tes terlalu kuat pada implementasi internal, bukan pada perilaku (behavior).
+
+### Refleksi F.I.R.S.T. Principles
+Saya telah meninjau unit test yang saya buat dan mengevaluasinya berdasarkan prinsip F.I.R.S.T.:
+
+- Fast (Cepat): Ya, unit test saya berjalan sangat cepat karena menggunakan mocking (Mockito) dan tidak bergantung pada database eksternal atau framework yang berat.
+
+- Independent (Mandiri): Ya, setiap test method memiliki setup sendiri atau menggunakan mock yang terisolasi, sehingga urutan eksekusi tidak memengaruhi hasil.
+
+- Repeatable (Dapat Diulang): Ya, hasil tes konsisten di lingkungan lokal maupun dalam pipeline CI/CD (GitHub Actions).
+
+- Self-Validating (Memvalidasi Sendiri): Ya, setiap tes memiliki assertion (assertEquals, assertTrue, assertThrows) yang memberikan output "pass" atau "fail" secara eksplisit.
+
+- Thorough (Menyeluruh): Bagi saya, ini adalah bagian yang perlu saya tingkatkan. Meskipun saya sudah mencakup skenario dasar, saya merasa belum sepenuhnya thorough.
+
+Di masa depan, saya akan lebih disiplin untuk menulis tes bagi setiap kemungkinan error handling (seperti NoSuchElementException atau skenario null pointer) secara lebih detail. Saya juga akan memastikan bahwa setiap branch di dalam if-else di kode utama memiliki tes yang bersesuaian agar code coverage tidak hanya tinggi, tetapi juga berkualitas.
