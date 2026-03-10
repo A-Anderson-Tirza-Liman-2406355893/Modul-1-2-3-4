@@ -30,7 +30,6 @@ class PaymentRepositoryTest {
         payment2 = new Payment("2", "CASH_ON_DELIVERY", paymentData2);
     }
 
-    // Happy Path: Berhasil menyimpan payment
     @Test
     void testSaveCreate() {
         Payment result = paymentRepository.save(payment1);
@@ -38,7 +37,6 @@ class PaymentRepositoryTest {
         assertEquals(payment1.getId(), result.getId());
     }
 
-    // Happy Path: Berhasil mencari berdasarkan ID yang ada
     @Test
     void testFindByIdIfFound() {
         paymentRepository.save(payment1);
@@ -47,14 +45,12 @@ class PaymentRepositoryTest {
         assertEquals(payment1.getId(), result.getId());
     }
 
-    // Unhappy Path: Mencari ID yang tidak ada di repository
     @Test
     void testFindByIdIfNotFound() {
         Payment result = paymentRepository.findById("ID_NGASAL");
-        assertNull(result); // Harus mengembalikan null karena data tidak ada
+        assertNull(result);
     }
 
-    // Happy Path: Mengambil semua data
     @Test
     void testFindAll() {
         paymentRepository.save(payment1);
