@@ -64,6 +64,79 @@ class PaymentServiceImplTest {
     }
 
     @Test
+    void testAddPayment() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP1234ABC5678");
+
+        Payment dummyPayment = new Payment("dummy-id", "VOUCHER", paymentData);
+        when(paymentRepository.save(any(Payment.class))).thenReturn(dummyPayment);
+
+        Payment result = paymentService.addPayment(order, "VOUCHER", paymentData);
+
+        verify(paymentRepository, times(1)).save(any(Payment.class));
+        assertNotNull(result);
+    }
+
+    @Test
+    void testSetStatusSuccess() {
+        Payment payment = payments.get(0);
+
+        // Mock getPayment
+        when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        Payment result = paymentService.setStatus(payment, "SUCCESS");
+
+        assertEquals("SUCCESS", result.getStatus());
+        assertEquals("SUCCESS", order.getStatus()); // Karena Order terkait harus jadi SUCCESS
+    }
+
+    @Test
+    void testSetStatusRejected() {
+        Payment payment = payments.get(1);
+
+        when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        Payment result = paymentService.setStatus(payment, "REJECTED");
+
+        assertEquals("REJECTED", result.getStatus());
+        assertEquals("FAILED", order.getStatus()); // Karena Order terkait harus jadi FAILED
+    }
+
+    @Test
+    void testSetStatusInvalid() {
+        Payment payment = payments.get(0);
+
+        when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            paymentService.setStatus(payment, "INVALID_STATUS");
+        });
+    }
+
+    @Test
+    void testGetPaymentIfFound() {
+        Payment payment = payments.get(0);
+        when(paymentRepository.findById(payment.getId())).thenReturn(payment);
+
+        Payment result = paymentService.getPayment(payment.getId());
+        assertEquals(payment.getId(), result.getId());
+    }
+
+    @Test
+    void testGetPaymentIfNotFound() {
+        when(paymentRepository.findById("INVALID_ID")).thenReturn(null);
+        Payment result = paymentService.getPayment("INVALID_ID");
+        assertNull(result);
+    }
+
+    @Test
+    void testGetAllPayments() {
+        when(paymentRepository.findAll()).thenReturn(payments);
+        List<Payment> result = paymentService.getAllPayments();
+        assertEquals(2, result.size());
+    }
+
+    @Test
     void testSetStatusSuccessUpdatesOrder() {
         Payment payment = payments.get(0);
         when(paymentRepository.findById(payment.getId())).thenReturn(payment);
