@@ -1,7 +1,10 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import lombok.Getter;
+
 import java.util.Map;
 
+@Getter
 public class Payment {
     private String id;
     private String method;
@@ -15,19 +18,4 @@ public class Payment {
         this.paymentData = paymentData;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Map<String, String> getPaymentData() {
-        return paymentData;
-    }
 }
